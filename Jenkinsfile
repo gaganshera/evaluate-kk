@@ -2,6 +2,7 @@ pipeline {
   environment { 
         registry = "kriti27kwatra/devops-final-home-assignment" 
         dockerImage = '-kritikwatra-develop' 
+        registryCredential = 'dockerhub'
     }
 agent any
 tools {
@@ -39,7 +40,7 @@ stages {
             stage('Publish to Docker Hub') {
                 steps {
                     script {
-                        docker.withRegistry('') {
+                        docker.withRegistry('', registryCredential) {
                         dockerImage.push()
                         }
                     }
