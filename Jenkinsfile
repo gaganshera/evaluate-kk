@@ -3,7 +3,7 @@ pipeline {
         registry = "kriti27kwatra/devops-final-home-assignment" 
         registryCredential = 'docker-kritikwatra'
         dockerImage = ''
-        containerName = c-kritikwatra-develop
+        containerName = 'c-kritikwatra-develop'
     }
 agent any
 tools {
@@ -50,11 +50,10 @@ stages {
    stage('Docker Deployment') {
       steps {
        script {
-           docker.run -d --name containerName dockerImage
+           dockerImage.run(name:containerName)
+           
          }
       }
     }
    }
-
-}
 }
