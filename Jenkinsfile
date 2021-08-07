@@ -14,7 +14,7 @@ stages {
       steps {
        script {
        def scannerHome = tool 'sonarqube';
-           withSonarQubeEnv("sonarqube-container") {
+           withSonarQubeEnv("sonarqube") {
            bat "${tool("sonarqube")}/bin/sonar-scanner \
            -Dsonar.projectKey=sonar-kritikwatra\
            -Dsonar.sources=. \
