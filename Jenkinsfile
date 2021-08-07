@@ -14,13 +14,13 @@ stages {
       steps {
        script {
        def scannerHome = tool 'sonarqube';
-           withSonarQubeEnv("sonarqube") {
+           withSonarQubeEnv("Test_Sonar") {
            bat "${tool("sonarqube")}/bin/sonar-scanner \
            -Dsonar.projectKey=sonar-kritikwatra\
            -Dsonar.sources=. \
            -Dsonar.css.node=. \
            -Dsonar.host.url=http://localhost:9000 \
-           -Dsonar.login=your-generated-token-from-sonarqube-container"
+           -Dsonar.login=30ed1c85f6b51357ff178d32c1d8ba7d6752fa1b"
                }
            }
        }
