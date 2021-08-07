@@ -50,8 +50,7 @@ stages {
    stage('Docker Deployment') {
       steps {
        script {
-           dockerImage.run()
-           
+            docker run -p 7300:7300 dockerImage
          }
       }
     }
