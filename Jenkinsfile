@@ -1,4 +1,8 @@
 pipeline {
+  environment { 
+        registry = "kriti27kwatra/devops-final-home-assignment" 
+        dockerImage = '-kritikwatra-develop' 
+    }
 agent any
 tools {
   nodejs "node"
@@ -6,16 +10,15 @@ tools {
 stages {
       stage('Build') {
         steps {
-          git 'https://gitlab.com/kriti27kwatra/devops-final-home-assignment'
           bat 'npm install'
       }
     }
     stage('Sonar Analysis') {
       steps {
        script {
-       def scannerHome = tool 'Test_Sonar';
+       def scannerHome = tool 'sonarqube';
            withSonarQubeEnv("Test_Sonar") {
-           bat "${tool("Test_Sonar")}/bin/sonar-scanner \
+           bat "${tool("sonarqube")}/bin/sonar-scanner \
            -Dsonar.projectKey=sonar-kritikwatra\
            -Dsonar.sources=. \
            -Dsonar.css.node=. \
@@ -25,5 +28,22 @@ stages {
            }
        }
     }
+    stage('Docker Image') {
+                steps {
+                    script {
+                        dockerImage = docker.build registry + dockerImage + ":$BUILD_NUMBER"
+                    }
+                }
+            }
+
+            stage('Publish to Docker Hub') {
+                steps {
+                    script {
+                        docker.withRegistry('') {
+                        dockerImage.push()
+                        }
+                    }
+                }
+            }
 }
 }
