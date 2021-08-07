@@ -2,6 +2,8 @@ pipeline {
   environment { 
         registry = "kriti27kwatra/devops-final-home-assignment" 
         registryCredential = 'docker-kritikwatra'
+        dockerImage = ''
+        containerName = c-kritikwatra-develop
     }
 agent any
 tools {
@@ -16,7 +18,7 @@ stages {
     stage('Sonar Analysis') {
       steps {
        script {
-       def scannerHome = tool 'Test_Sonar';
+           def scannerHome = tool 'Test_Sonar';
            withSonarQubeEnv("Test_Sonar") {
            bat "${tool("Test_Sonar")}/bin/sonar-scanner \
            -Dsonar.projectKey=sonar-kritikwatra\
@@ -29,21 +31,30 @@ stages {
        }
     }
     stage('Docker Image') {
-                steps {
-                    script {
-                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                    }
-                }
-            }
+      steps {
+       script {
+           dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
+          }
+    }
 
-            stage('Publish to Docker Hub') {
-                steps {
-                    script {
-                        docker.withRegistry('', registryCredential) {
-                        dockerImage.push()
-                        }
-                    }
-                }
-            }
+    stage('Publish to Docker Hub') {
+      steps {
+       script {
+           docker.withRegistry('', registryCredential) {
+           dockerImage.push()
+         }
+      }
+    }
+   }
+   stage('Docker Deployment') {
+      steps {
+       script {
+           docker.run -d --name containerName dockerImage
+         }
+      }
+    }
+   }
+
 }
 }
