@@ -1,7 +1,6 @@
 pipeline {
   environment { 
         registry = "kriti27kwatra/devops-final-home-assignment" 
-        dockerImage = '-kritikwatra-develop' 
         registryCredential = 'docker-kritikwatra'
     }
 agent any
@@ -32,7 +31,7 @@ stages {
     stage('Docker Image') {
                 steps {
                     script {
-                        dockerImage = docker.build registry + dockerImage + ":$BUILD_NUMBER"
+                        dockerImage = docker.build registry + ":$BUILD_NUMBER"
                     }
                 }
             }
