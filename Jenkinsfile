@@ -2,7 +2,7 @@ pipeline {
   environment { 
         registry = "kriti27kwatra/devops-final-home-assignment" 
         dockerImage = '-kritikwatra-develop' 
-        registryCredential = 'dockerhub'
+        registryCredential = 'docker-kritikwatra'
     }
 agent any
 tools {
