@@ -13,7 +13,7 @@ stages {
     stage('Sonar Analysis') {
       steps {
        script {
-       def scannerHome = tool 'sonarqube';
+       def scannerHome = tool 'Test_Sonar';
            withSonarQubeEnv("Test_Sonar") {
            bat "${tool("sonarqube")}/bin/sonar-scanner \
            -Dsonar.projectKey=sonar-kritikwatra\
