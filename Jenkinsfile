@@ -35,7 +35,7 @@ stages {
 		stage('Pre-Container Check') {
       steps {
         script {
-          def return_val = powershell script: "docker ps --filter publish=7200 | Measure-Object -Line | Select-Object Lines", returnStatus: true
+          def return_val = powershell script: "(docker ps --filter publish=7200 | Measure-Object -Line | Select-Object Lines).lines", returnStatus: true
           if(return_val == 1) {
       			bat 'docker stop ' + containerName
             bat 'docker rm ' + containerName
