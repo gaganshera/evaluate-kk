@@ -44,7 +44,8 @@ stages {
       steps {
         script {
           if(true) {
-      				docker stop containerName
+      			def con =	'docker stop ' + containerName
+            bat con
 			}
         }
       }
