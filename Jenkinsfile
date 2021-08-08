@@ -77,7 +77,7 @@ stages {
     stage('Kuberenetes Deployment') {
       steps {
        script {
-          bat 'kubctl apply -f . -n kubernetes-cluster-kritikwatra'
+          bat 'kubectl apply -f . -n kubernetes-cluster-kritikwatra'
            }
       }
     }
