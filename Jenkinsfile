@@ -1,8 +1,9 @@
 pipeline {
   environment { 
-        registry = "kriti27kwatra/devops-final-home-assignment" 
+        registry = "kriti27kwatra/devops-assignment-kritikwatra-develop" 
         registryCredential = 'docker-kritikwatra'
         dockerImage = ''
+        dockerImageLatest = ''
         containerName = 'c-kritikwatra-develop'
     }
 agent any
@@ -34,6 +35,7 @@ stages {
       steps {
        script {
            dockerImage = docker.build registry + ":$BUILD_NUMBER"
+           dockerImageLatest = docker.build registry + ":latest"
               }
           }
     }
@@ -43,8 +45,9 @@ stages {
 		stage('Pre-Container Check') {
       steps {
         script {
-          def ifExist = 'docker ps --filter publish=7300'
-          if(bat ifExist) {
+         // def ifExist = 'docker ps --filter publish=7300'
+          def return_val = powershell script: "docker ps --filter publish=7300", returnStatus: true
+          if(return_val) {
       			bat 'docker stop ' + containerName
             bat 'docker rm ' + containerName
 			}
@@ -57,6 +60,7 @@ stages {
 				script {
 					docker.withRegistry('', registryCredential) {
 					dockerImage.push()
+          dockerImageLatest.push()
 					}
 				}
 			}
@@ -66,7 +70,14 @@ stages {
    stage('Docker Deployment') {
       steps {
        script {
-          dockerImage.run('-p 7300:7300 --name ' + containerName)
+          dockerImageLatest.run('-p 7300:7300 --name ' + containerName)
+           }
+      }
+    }
+    stage('Kuberenetes Deployment') {
+      steps {
+       script {
+          bat 'kubctl apply -f . -n kubernetes-cluster-kritikwatra'
            }
       }
     }

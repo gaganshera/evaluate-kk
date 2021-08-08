@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      app: webapp
+  replicas: 4
+  template: #template for pods
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: kriti27kwatra/devops-assignment-kritikwatra-develop:latest

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-service
+spec:
+#This define which pod are going to be represented by this service
+#This service become a network endpoint for either other service or maybe external user to connect to (eg; browser)
+  selector:
+    app: webapp
+  ports:
+    - name: http
+      port: 80
+      nodePort: 30158
+
+ 
+
+  # type is of two type: 1. ClusterIP: only accessible inside a cluster like microservices
+  #                      2. NodePort: accessible outside the cluster like webapp show in browser
+  type: NodePort
