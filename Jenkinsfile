@@ -51,6 +51,7 @@ stages {
       steps {
        script {
             def container = dockerImage.run('-p 7300:7300','--name ' + containerName)
+            container.start()
            }
       }
     }
