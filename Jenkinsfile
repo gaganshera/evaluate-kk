@@ -43,9 +43,10 @@ stages {
 		stage('Pre-Container Check') {
       steps {
         script {
-          if(true) {
-      			def con =	'docker stop ' + containerName
-            bat con
+          def ifExist = 'docker ps --filter publish=7300'
+          if(bat ifExist) {
+      			bat 'docker stop ' + containerName
+            bat 'docker rm ' + containerName
 			}
         }
       }
