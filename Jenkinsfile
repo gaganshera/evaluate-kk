@@ -45,10 +45,8 @@ stages {
 		stage('Pre-Container Check') {
       steps {
         script {
-         // def ifExist = 'docker ps --filter publish=7300'
           def return_val = powershell script: "docker ps --filter publish=7300", returnStatus: true
-          println('valuee ---- ' + return_val)
-          if(return_val) {
+          if(return_val == 0) {
       			bat 'docker stop ' + containerName
             bat 'docker rm ' + containerName
 			}
