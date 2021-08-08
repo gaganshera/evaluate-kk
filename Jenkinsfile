@@ -43,7 +43,7 @@ stages {
 		stage('Pre-Container Check') {
       steps {
         script {
-          if(bat "docker ps --filter publish=7300") {
+          if(true) {
       				docker stop containerName
 			}
         }
