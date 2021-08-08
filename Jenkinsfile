@@ -50,7 +50,7 @@ stages {
    stage('Docker Deployment') {
       steps {
        script {
-            "docker run -p 7300:7300 --name $containerName $dockerImage"
+            powershell 'docker run -p 7300:7300 --name $containerName $dockerImage'
            }
       }
     }
