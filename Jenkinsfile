@@ -41,9 +41,14 @@ stages {
     stage('Containers') {
 	  parallel {
 		stage('Pre-Container Check') {
-			if(true) {
-				docker stop containerName
+      steps {
+        script {
+          if(docker ps --filter publish=7300) {
+      				docker stop containerName
 			}
+        }
+      }
+			
 		}
 		stage('Push to Docker Hub') {
 			steps {
