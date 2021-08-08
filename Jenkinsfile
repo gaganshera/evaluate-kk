@@ -41,7 +41,7 @@ stages {
     stage('Containers') {
 	  parallel {
 		stage('Pre-Container Check') {
-			if(docker ps --filter publish=7300) {
+			if(true) {
 				docker stop containerName
 			}
 		}
