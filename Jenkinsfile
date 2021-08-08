@@ -50,8 +50,8 @@ stages {
    stage('Docker Deployment') {
       steps {
        script {
-            def container = 'docker run -p 7300:7300 --name ' + containerName + ' ' + dockerImage
-            bat container
+          dockerImage.run('-p 7300:7300').withDockerContainer(args: '--name containerName')
+           
            }
       }
     }
