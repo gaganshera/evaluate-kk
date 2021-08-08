@@ -38,15 +38,25 @@ stages {
           }
     }
 
-    stage('Publish to Docker Hub') {
-      steps {
-       script {
-           docker.withRegistry('', registryCredential) {
-           dockerImage.push()
-         }
-      }
-    }
-   }
+    stage('Containers') {
+	  parallel {
+		stage('Pre-Container Check') {
+			def var = docker ps --filter "publish=7300"
+			if(var) {
+				docker stop containerName
+			}
+		}
+		stage('Push to Docker Hub') {
+			steps {
+				script {
+					docker.withRegistry('', registryCredential) {
+					dockerImage.push()
+					}
+				}
+			}
+		}
+	  }
+  }
    stage('Docker Deployment') {
       steps {
        script {
