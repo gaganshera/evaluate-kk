@@ -76,7 +76,8 @@ stages {
     stage('Kuberenetes Deployment') {
       steps {
        script {
-          bat 'kubectl apply -f . -n kubernetes-cluster-kritikwatra'
+          bat 'kubectl apply -f deployment.yaml -n kubernetes-cluster-kritikwatra'
+          bat 'kubectl apply -f service.yaml -n kubernetes-cluster-kritikwatra'
            }
       }
     }
