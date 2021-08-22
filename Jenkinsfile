@@ -1,24 +1,26 @@
 pipeline {
   environment { 
         registry = "kriti27kwatra/devops-assignment-kritikwatra-master" 
-        registryCredential = 'docker-kritikwatra'
+        registryCredential = 'DockerHub'
         dockerImage = ''
         dockerImageLatest = ''
         containerName = 'c-kritikwatra-master'
     }
 agent any
 tools {
-  nodejs "node"
+  nodejs "nodejs"
+  dockerTool 'Test_Docker'
 }
 stages {
       stage('Build') {
         steps {
-          bat 'npm install'
+          git 'https://github.com/gaganshera/node-app.git'
+          sh 'npm install'
       }
     }
     stage('Unit Testing') {
       steps {
-         bat 'npm test'
+         sh 'npm test'
       }
     }
     stage('Docker Image') {
@@ -34,20 +36,27 @@ stages {
 	  parallel {
 		stage('Pre-Container Check') {
       steps {
-        script {
-          def return_val = powershell script: "(docker ps --filter publish=7200 | Measure-Object -Line | Select-Object Lines).lines", returnStatus: true
-          if(return_val > 1) {
-      			bat 'docker stop ' + containerName
-            bat 'docker rm ' + containerName
-			}
-        }
+        sh '''
+          CONTAINER_ID=$(docker ps -a | grep 6200 | cut -d " " -f 1)
+          if [ $CONTAINER_ID ]
+          then
+              docker rm -f $CONTAINER_ID
+          fi
+        '''
+      //   script {
+      //     def return_val = powershell script: "(docker ps --filter publish=7200 | Measure-Object -Line | Select-Object Lines).lines", returnStatus: true
+      //     if(return_val > 1) {
+      // 			sh 'docker stop ' + containerName
+      //       sh 'docker rm ' + containerName
+			// }
+      //   }
       }
 			
 		}
 		stage('Push to Docker Hub') {
 			steps {
 				script {
-					docker.withRegistry('', registryCredential) {
+					withDockerRegistry(credentialsId: registryCredential, toolName: 'docker') {
 					dockerImage.push()
           dockerImageLatest.push()
 					}
@@ -66,8 +75,8 @@ stages {
     stage('Kuberenetes Deployment') {
       steps {
        script {
-          bat 'kubectl apply -f deployment.yaml -n kubernetes-cluster-kritikwatra'
-          bat 'kubectl apply -f service.yaml -n kubernetes-cluster-kritikwatra'
+          sh 'kubectl apply -f deployment.yaml -n kubernetes-cluster-kritikwatra'
+          sh 'kubectl apply -f service.yaml -n kubernetes-cluster-kritikwatra'
            }
       }
     }
