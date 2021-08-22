@@ -14,7 +14,7 @@ tools {
 stages {
       stage('Build') {
         steps {
-          git 'https://github.com/gaganshera/node-app.git'
+          // git 'https://github.com/gaganshera/node-app.git'
           sh 'npm install'
       }
     }
